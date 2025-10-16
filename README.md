@@ -36,7 +36,7 @@ Before running locally or in Docker:
 - [Java 21+](https://adoptium.net/)
 - [Maven 3.9+](https://maven.apache.org/)
 -  [Docker](https://docs.docker.com/get-docker/)
-- An [OpenWeatherMap API Key](https://openweathermap.org/api)
+- An [OpenWeatherMap API Key](https://openweathermap.org/api) (optional)
 
 ---
 
