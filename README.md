@@ -76,11 +76,11 @@ docker build -t weather-app .
 
 ###  Run Container
 ```bash
-docker run -d   -p 8081:8081   -v $(pwd)/data:/data --name weather-app   weather-app
+docker run -d   -p 8081:8081  --name weather-app   weather-app
 ```
 if key not Worked Please generate API KEY from here( "https://home.openweathermap.org/api_keys") and run  this command 
 ```bash
-docker run -d   -p 8081:8081   -v $(pwd)/data:/data   -e OWM_API_KEY="YOUR_OPENWEATHERMAP_API_KEY"   --name weather-app   weather-app
+docker run -d   -p 8081:8081   -e OWM_API_KEY="YOUR_OPENWEATHERMAP_API_KEY"   --name weather-app   weather-app
 ```
 
 SQLite database persists in `./data/weather.db`  

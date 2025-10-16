@@ -15,7 +15,9 @@ WORKDIR /app
 COPY --from=builder /app/target/weatherapp-0.0.1-SNAPSHOT.jar app.jar
 
 # Create data folder (for SQLite persistence)
-RUN mkdir -p /data
+# Create writable /data directory for SQLite
+RUN mkdir -p /data && chmod 777 /data
+VOLUME /data
 
 # Expose port
 EXPOSE 8081
