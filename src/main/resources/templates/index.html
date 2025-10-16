@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>🌤 Weather App</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #89f7fe, #66a6ff);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding-top: 50px;
+            color: #333;
+        }
+.success-msg {
+    background-color: #e6ffe6;
+    color: #007a00;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 500;
+    margin-top: 10px;
+    text-align: center;
+}
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 30px 40px;
+            width: 450px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #004aad;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 65%;
+            font-size: 16px;
+            outline: none;
+        }
+
+        button {
+            padding: 10px 18px;
+            border: none;
+            background-color: #0078ff;
+            color: white;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #005fcc;
+        }
+
+        .weather {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        .weather h2 {
+            margin-top: 0;
+            color: #0078ff;
+        }
+
+        .recent {
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        .recent ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recent li a {
+            text-decoration: none;
+            color: #0078ff;
+            font-weight: 500;
+        }
+
+        .recent li a:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            background-color: #ffe0e0;
+            color: #d10000;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .logout-btn {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            background-color: #ff4e4e;
+            color: white;
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #d13b3b;
+        }
+
+        .welcome {
+            text-align: right;
+            color: #444;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div th:if="${username}" class="welcome">
+        Welcome, <span th:text="${username}"></span>!
+    </div>
+
+    <h1>🌤 Weather App</h1>
+
+    <form method="get" action="/search">
+        <input type="text" name="city" placeholder="Enter city" required>
+        <button type="submit">Get Weather</button>
+    </form>
+
+    <div th:if="${error}" class="error">
+        <p th:text="${error}"></p>
+    </div>
+
+    <div th:if="${weather}" class="weather">
+        <h2 th:text="'Weather in ' + ${weather.name} + ', ' + ${weather.sys.country}"></h2>
+        <p>Temperature: <span th:text="${weather.main.temp} + ' °C'"></span></p>
+        <p>Feels Like: <span th:text="${weather.main.feels_like} + ' °C'"></span></p>
+        <p>Humidity: <span th:text="${weather.main.humidity} + ' %'"></span></p>
+        <p>Visibility: <span th:text="${weather.visibility} + ' m'"></span></p>
+        <p>Wind Speed: <span th:text="${weather.wind.speed} + ' m/s'"></span></p>
+        <p>Description: <span th:text="${weather.weather[0].description}"></span></p>
+    </div>
+
+    <div class="recent" th:if="${recentCities != null}">
+        <h3>Last 5 Recent Searches</h3>
+
+        <!-- Show list if there are recent cities -->
+        <ul th:if="${!#lists.isEmpty(recentCities)}">
+            <li th:each="s : ${recentCities}">
+                <a th:href="@{/search(city=${s.city})}"
+                   th:text="${s.city + ' (' + s.country + ')'}"></a>
+            </li>
+        </ul>
+
+        <!-- Show message if empty -->
+        <p th:if="${#lists.isEmpty(recentCities)}" class="no-history">
+            No search history available
+        </p>
+
+        <!-- Success message after clearing -->
+        <div th:if="${message}" class="success-msg" id="message">
+            <p th:text="${message}"></p>
+        </div>
+
+        <!-- Clear history button -->
+        <form method="post" action="/clear-history" th:if="${!#lists.isEmpty(recentCities)}">
+            <button type="submit" id="clearBtn" class="clear-btn">🗑 Clear History</button>
+        </form>
+
+        <!-- Disabled button if no history -->
+        <button type="button" class="clear-btn" disabled
+                th:if="${#lists.isEmpty(recentCities)}"
+                style="opacity:0.6; cursor:not-allowed;">
+            🗑 Clear History
+        </button>
+    </div>
+
+    <script>
+    const msg = document.getElementById("message");
+    const btn = document.getElementById("clearBtn");
+
+    if (msg && btn) {
+        // Temporarily disable after showing success
+        btn.disabled = true;
+        btn.style.opacity = "0.6";
+        btn.style.cursor = "not-allowed";
+
+        // Fade out message smoothly
+        setTimeout(() => {
+            msg.style.transition = "opacity 0.8s";
+            msg.style.opacity = "0";
+        }, 2000);
+    }
+</script>
+    </div>
+</div>
+
+<form method="post" action="/logout">
+    <button type="submit" class="logout-btn">Logout</button>
+</form>
+
+</body>
+</html>

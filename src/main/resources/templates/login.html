@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>🔐 Login</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #89f7fe, #66a6ff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background: #fff;
+            padding: 40px 50px;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #004aad;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        h1 span {
+            font-size: 30px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 80%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            outline: none;
+        }
+
+        button {
+            width: 85%;
+            padding: 10px;
+            background-color: #0078ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #005fcc;
+        }
+
+        .error {
+            background: #ffe0e0;
+            color: #b30000;
+            border-radius: 8px;
+            padding: 8px;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .success {
+            color: #008000;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .signup-link {
+            margin-top: 15px;
+            font-size: 15px;
+        }
+
+        .signup-link a {
+            color: #0078ff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <h1><span>🔐</span> Login</h1>
+
+    <div th:if="${param.logout}" class="success">
+        You have been logged out successfully.
+    </div>
+
+    <div th:if="${param.error}" class="error">
+        Invalid username or password. Please try again.
+    </div>
+
+    <form th:action="@{/login}" method="post">
+        <input type="text" name="username" placeholder="Username" required><br>
+        <input type="password" name="password" placeholder="Password" required><br>
+        <button type="submit">Login</button>
+    </form>
+
+    <div class="signup-link">
+        Don’t have an account? <a th:href="@{/signup}">Sign up</a>
+    </div>
+</div>
+</body>
+</html>
