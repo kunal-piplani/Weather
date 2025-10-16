@@ -18,6 +18,8 @@ public class SearchHistoryService {
         this.repository = repository;
     }
 
+    @Transactional
+
     public void addSearch(String city, String country, User user) {
         repository.findByUser_IdAndCityIgnoreCaseAndCountryIgnoreCase(user.getId(), city, country)
                 .ifPresentOrElse(existing -> {
