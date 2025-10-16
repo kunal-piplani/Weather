@@ -123,7 +123,7 @@ AND id NOT IN (SELECT MIN(id) FROM users WHERE username = 'someuser');
 
 | Issue | Cause | Solution |
 |--------|--------|----------|
-| `city not found` | Invalid city name | Check spelling / API key |
+| `city not found` | Invalid city name | Check spelling|
 | `403 Forbidden` | Missing login | Log in first |
 | `No EntityManager` | Missing `@Transactional` | Added in `SearchHistoryService` |
 | DB not persisting | Volume not mounted | Ensure `-v $(pwd)/data:/data` is set |
