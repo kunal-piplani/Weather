@@ -86,7 +86,11 @@ docker run -d   -p 8081:8081   -v $(pwd)/data:/data   -e OWM_API_KEY="YOUR_OPENW
 SQLite database persists in `./data/weather.db`  
 Application accessible at [http://localhost:8081](http://localhost:8081)
 
+## Local (Non-Docker) Run
 
+```bash
+mvn spring-boot:run
+```
 
 ## Authentication Flow
 
