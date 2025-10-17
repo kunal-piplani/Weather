@@ -7,7 +7,7 @@ owm:
 
 spring:
   datasource:
-    url: jdbc:sqlite:/data/weather.db
+    url: jdbc:sqlite:./data/weather.db
     driver-class-name: org.sqlite.JDBC
   jpa:
     hibernate:
